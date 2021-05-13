@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.faces.bean.ApplicationScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -21,6 +22,7 @@ import br.com.framework.implementacao.crud.VariavelConexaoUtil;
  * 
  */
 
+@ApplicationScoped  // estamos dizendo que essa conexão é para toda a aplicação
 public class HibernateUtil implements Serializable {
 
 	private static final long serialVersionUID = 1L;
