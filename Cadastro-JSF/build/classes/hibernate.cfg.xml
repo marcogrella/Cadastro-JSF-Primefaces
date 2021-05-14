@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE hibernate-configuration PUBLIC    
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"    
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory name="sessionFactory">
+
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="connection.connection.datasource">java:/comp/env/jdbc/datasource</property>
+		<property name="hibernate.default_schema">public</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+		<property name="hibernate.jdbc.factory_class">org.hibernate.jdbc.NonBatchingBatcherFactory</property> <!-- Evita que transações em lote e que não forem concluídas não sejam vistas 
+			como bem sucedidaas pelo clinte. -->
+		<property name="connection.jdbc.batch_size">100</property><!-- execução de operações em lote 
+			(lista de insert por exemplo) complementa a propriedade de cima -->
+		<property name="hibernate.cache.use_second_cache">true</property><!-- cach de segundo nível -->
+		<property name="hibernate.transaction.auto_close_session">true</property> <!-- fechar automaticamente a sessão -->
+		<property name="hibernate.hm2ddl.auto">update</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">true</property> <!-- se mostrar o sql na opção acima, esta formata o sql -->
+		<property name="hibernate.generate_statistics">false</property> <!-- opção para mostrar estatíticas como qual instrução sql demora mais, 
+			etc. -->
+		<property name="hibernate.use_sql_comments">false</property>
+		<property name="hibernate.connection.autocommit">false</property>
+		<property name="hibernate.connection.pool_size">50</property>
+
+	<!-- Hibernate Envers - Fácil Auditoria de Entidade -> Serve para mapear 
+			as entidades (@Entity) do banco de dados. Por exemplo, se houver uma tabela 
+			Pessoa, com a notação @Audited uma nova tabela é criada pessoa_aud e armazenada os registros 
+			de logs e com isso conseguimos ver todos os status e alterações que forem 
+			feitas. Essa notação é a @Audited e pode ser colocada, inclusive ver as informações 
+			de quem excluiu, editou um dado. -->
+	
+		<mapping class=""/>
+
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="post-insert" /><!-- Qual tipo de instrução queremos auditar. -->
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="post-update" /><!-- Qual tipo de instrução queremos auditar. -->
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="post-delete" /><!-- Qual tipo de instrução queremos auditar. -->
+
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="post-collection-recreate"></listener> <!-- Quando forem listas -->
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="post-collection-update"></listener>
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="post-collection-remove"></listener>
+
+
+
+	</session-factory>
+</hibernate-configuration>  
