@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context reloadable="true">
+
+	<Resource
+		name="jdbc/datasource" 
+		auth="Container"
+		type="javax.sql.DataSource" 
+		defaultAutoCommit="false"  
+		maxActive="50" 
+		maxIdle="10" 
+		maxWait="10" 
+		initialSize="10" 
+		driverClassName="org.postgresql.Driver"
+		validationQuery="SELECT 'OK'"  
+		testWhileIdle="true" 
+		testOnBorrow="true"
+		numTestsPerEvictionRun="5" 
+		timeBetweenEvictionRunsMillis ="5000" 
+		minEvictableIdleTimeMillis="60000" 
+		antiJARLocking="false"
+		antiResourceLocking="false" 
+		username="postgres" 
+		password="admin"
+		url="jdbc:postgresql://localhost:5432/cadastrojsf?autoReconect=true">
+	</Resource>
+	<!--  A classe do tomcat que está lendo esse arquivo é a org.apache.tomcat.dbcp.PoolingDataSource -->
+	<!-- Pool de Conexões https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html -->
+
+</Context>
