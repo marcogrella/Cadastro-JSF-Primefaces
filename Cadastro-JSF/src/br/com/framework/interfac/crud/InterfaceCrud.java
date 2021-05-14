@@ -62,12 +62,14 @@ public interface InterfaceCrud<T> extends Serializable{
 	List<?> getListSQLDinamica(String sql) throws Exception;
 	
 	
-	/* métodos (3 seguintes) que implementam jdbc do spring e com boa performance */ 
+	
+	/* métodos (3 classes) que implementam jdbc do spring e com boa performance */ 
 	JdbcTemplate getJdbcTemplate();
 	
 	SimpleJdbcTemplate getSimpleJdbcTemplate();
 	
 	SimpleJdbcInsert getSimpleJdbcInsert();
+	
 	
 	
 	/* total de registros de uma tabela */
