@@ -26,6 +26,9 @@ public interface InterfaceCrud<T> extends Serializable{
 	/* salvar ou atualizar */
 	void saveOrUpdate(T obj) throws Exception;
 
+	/* atualiza o objeto */
+	void update(T obj) throws Exception;
+	
 	/* realiza a exclusão de dados */
 	void delete(T obj) throws Exception;
 	
@@ -77,6 +80,10 @@ public interface InterfaceCrud<T> extends Serializable{
 	
 	/* Consulta dinâmica para realizar consultas dinâmicas no banco de daos. */
 	Query obterQuery(String query) throws Exception;
+	
+	/* Lista de objetos em array */
+	List<Object[]> getListSQLDinamicaArray(String sql) throws Exception;
+	
 	
 	/* carregamento por demanda - paginação */
 	List<T> findListByQueryDinamica(String query, int inicianoRegistro, int maximoResultado) throws Exception; 
