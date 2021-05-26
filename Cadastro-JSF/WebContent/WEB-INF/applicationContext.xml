@@ -48,7 +48,7 @@
 		class="org.springframework.jndi.JndiObjectFactoryBean"
 		name="springDataSource" id="springDataSource">
 		<property name="jndiName">
-			<value>java:comp/env/jdbc/datasource</value>
+			<value>java:/comp/env/jdbc/datasource</value>
 		</property>
 
 	</bean>

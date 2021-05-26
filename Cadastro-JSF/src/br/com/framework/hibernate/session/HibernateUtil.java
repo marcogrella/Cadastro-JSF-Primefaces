@@ -13,6 +13,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.SessionFactoryImplementor;
 
+import br.com.framework.implementacao.crud.VariavelConexaoUtil;
+
 
 /**
  * Responsável por estabelecer a conexão com o hibernate. Essas configurações
@@ -25,7 +27,7 @@ public class HibernateUtil implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static String JAVA_COMP_ENV_JDBC_DATA_SOURCE = "java:comp/env/jdbc/datasource";
+	public static String JAVA_COMP_ENV_JDBC_DATA_SOURCE = "java:/comp/env/jdbc/datasource";
 
 	/* objeto estático para prover a conexão do hibernate */
 	private static SessionFactory sessionFactory = buildSessionFactory();
@@ -40,7 +42,7 @@ public class HibernateUtil implements Serializable {
 			 * conexão
 			 */
 			if(sessionFactory == null) {
-				sessionFactory = (new Configuration()).configure().buildSessionFactory();
+				sessionFactory = new Configuration().configure().buildSessionFactory();
 			}
 
 			return sessionFactory;
@@ -52,6 +54,7 @@ public class HibernateUtil implements Serializable {
 
 	}
 
+	
 	/* métodos auxiliares do hibernate util */
 
 	/* Retorna o session factory corrente */
@@ -68,11 +71,11 @@ public class HibernateUtil implements Serializable {
 	public static Session openSession() {
 
 		/* se não houver chamará o método e criará um session */
-		if (sessionFactory == null) 
+		if (sessionFactory == null) {
 			buildSessionFactory();
-		return sessionFactory.openSession();
-
+		}
 		
+		return sessionFactory.openSession();
 
 	}
 
@@ -99,7 +102,7 @@ public class HibernateUtil implements Serializable {
 	public DataSource getDataSourceJndi() throws NamingException {
 
 		InitialContext context = new InitialContext();
-		return (DataSource) context.lookup(br.com.framework.implementacao.crud.VariavelConexaoUtil.JAVA_COMP_ENV_JDBC_DATA_SOURCE);
+		return (DataSource) context.lookup(VariavelConexaoUtil.JAVA_COMP_ENV_JDBC_DATA_SOURCE);
 
 	}
 

@@ -24,6 +24,7 @@ import br.com.framework.utils.UtilFramework;
 import br.com.project.listener.ContextLoaderListenerCadastroUtils;
 import br.com.project.model.classes.Entidade;
 
+
 @WebFilter(filterName="conexaoFilter")
 public class FilterOpenSessionInView extends DelegatingFilterProxy implements Serializable{
 
@@ -45,12 +46,11 @@ public class FilterOpenSessionInView extends DelegatingFilterProxy implements Se
 	
 	/* método que é invocado para toda a requisição e toda a resposta */
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws ServletException, IOException {
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain chain) throws ServletException, IOException {
 
 		/* JDBC Spring */
-		BasicDataSource springBasicDataSource = (BasicDataSource) ContextLoaderListenerCadastroUtils
-				.getBean("springDataSource"); 
+		BasicDataSource springBasicDataSource = (BasicDataSource) ContextLoaderListenerCadastroUtils.getBean("springDataSource"); 
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		PlatformTransactionManager transactionManager = new DataSourceTransactionManager(springBasicDataSource);
 		TransactionStatus status = transactionManager.getTransaction(def);
@@ -85,15 +85,12 @@ public class FilterOpenSessionInView extends DelegatingFilterProxy implements Se
 			/* após executar a ação anterior fazmos o commit */
 			transactionManager.commit(status);
 			
-			
-			if(sf.getCurrentSession().getTransaction().isActive()) {
+			if (sf.getCurrentSession().getTransaction().isActive()){
 				sf.getCurrentSession().flush();
 				sf.getCurrentSession().getTransaction().commit();
-				
 			}
 			
-			/* fecha a sessão */
-			if(sf.getCurrentSession().isOpen()) {
+			if (sf.getCurrentSession().isOpen()){
 				sf.getCurrentSession().close();
 			}
 			
@@ -102,39 +99,31 @@ public class FilterOpenSessionInView extends DelegatingFilterProxy implements Se
 			
 		} catch(Exception e) {
 			
-			transactionManager.rollback(status);
+transactionManager.rollback(status);
+			
 			e.printStackTrace();
 			
-			/* se a transação estiver ativa e acontecer um erro dá o rollback */
-			if(sf.getCurrentSession().getTransaction().isActive()) {
+			if (sf.getCurrentSession().getTransaction().isActive()){
 				sf.getCurrentSession().getTransaction().rollback();
 			}
 			
-			/* fecha a sessão se estiver ativa */
-			if(sf.getCurrentSession().isOpen()) {
+			if (sf.getCurrentSession().isOpen()){
 				sf.getCurrentSession().close();
 			}
 			
-			
-		} finally {
-			/* fechar a sessão do hibernate */
-			if(sf.getCurrentSession().beginTransaction().isActive()) {
-				sf.getCurrentSession().flush();
-				sf.getCurrentSession().clear();	
+		}finally {
+			if (sf.getCurrentSession().isOpen()){
+				if (sf.getCurrentSession().beginTransaction().isActive()){
+					sf.getCurrentSession().flush();
+					sf.getCurrentSession().clear();
+				}
+				
+				if (sf.getCurrentSession().isOpen()){
+					sf.getCurrentSession().close();
+				}
 			}
-			
-			if(sf.getCurrentSession().isOpen()) {
-				sf.getCurrentSession().close();
-			}
-			
-			
 		}
-		
-		
-		
-		
-		
-		
 	}
 	
+
 }

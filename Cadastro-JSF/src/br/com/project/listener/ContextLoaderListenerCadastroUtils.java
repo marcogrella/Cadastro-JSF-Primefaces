@@ -17,11 +17,8 @@ public class ContextLoaderListenerCadastroUtils extends ContextLoaderListener im
 	private static final long serialVersionUID = 1L;
 
 	/* método que retorna todo o contexto do spring */
-	private static WebApplicationContext getWac() {
-		return WebApplicationContextUtils
-				.getWebApplicationContext(getCurrentWebApplicationContext()
-										.getServletContext());
-		
+	private static WebApplicationContext getWac(){
+		return WebApplicationContextUtils.getWebApplicationContext(getCurrentWebApplicationContext().getServletContext());
 	}
 	
 	/* Esse método pode nos retornar qualquer instancia de um objeto utilizando o id */

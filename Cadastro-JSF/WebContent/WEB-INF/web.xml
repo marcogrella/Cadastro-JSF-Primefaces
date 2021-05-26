@@ -149,7 +149,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 	
 	<!-- mapeamento do filter conexaoFilter-->
 	<filter-mapping>
-		<filter-name>conexaFilter</filter-name>
+		<filter-name>conexaoFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
