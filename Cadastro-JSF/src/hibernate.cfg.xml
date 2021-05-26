@@ -25,34 +25,27 @@
 		<property name="hibernate.connection.autocommit">false</property>
 		<property name="hibernate.connection.pool_size">50</property>
 
-	<!-- Hibernate Envers - Fácil Auditoria de Entidade -> Serve para mapear 
-			as entidades (@Entity) do banco de dados. Por exemplo, se houver uma tabela 
-			Pessoa, com a notação @Audited uma nova tabela é criada pessoa_aud e armazenada os registros 
-			de logs e com isso conseguimos ver todos os status e alterações que forem 
-			feitas. Essa notação é a @Audited e pode ser colocada, inclusive ver as informações 
-			de quem excluiu, editou um dado. -->
 	
-		<mapping class=""/>
+	
+		<mapping class="br.com.project.model.classes.Entidade"/>
 
-		<listener
-			class="org.hibernate.envers.event.AuditEventListener"
-			type="post-insert" /><!-- Qual tipo de instrução queremos auditar. -->
-		<listener
-			class="org.hibernate.envers.event.AuditEventListener"
-			type="post-update" /><!-- Qual tipo de instrução queremos auditar. -->
-		<listener
-			class="org.hibernate.envers.event.AuditEventListener"
-			type="post-delete" /><!-- Qual tipo de instrução queremos auditar. -->
 
+		<listener class="org.hibernate.envers.event.AuditEventListener"
+			type="post-insert"/>
 		<listener
 			class="org.hibernate.envers.event.AuditEventListener"
-			type="post-collection-recreate"></listener> <!-- Quando forem listas -->
+			type="post-update"/>
 		<listener
 			class="org.hibernate.envers.event.AuditEventListener"
-			type="post-collection-update"></listener>
+			type="post-delete"/> 
+		<listener class="org.hibernate.envers.event.AuditEventListener"
+			type="post-collection-recreate"/> <!-- Qual tipo de instrução queremos auditar. -->
 		<listener
 			class="org.hibernate.envers.event.AuditEventListener"
-			type="post-collection-remove"></listener>
+			type="pre-collection-update"/> <!-- Qual tipo de instrução queremos auditar. -->
+		<listener
+			class="org.hibernate.envers.event.AuditEventListener"
+			type="pre-collection-remove" /> <!-- Quando forem listas -->
 
 
 

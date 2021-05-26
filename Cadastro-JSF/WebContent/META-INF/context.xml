@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context reloadable="true">
-
 	<Resource
 		name="jdbc/datasource" 
 		auth="Container"
@@ -25,5 +24,4 @@
 	</Resource>
 	<!--  A classe do tomcat que está lendo esse arquivo é a org.apache.tomcat.dbcp.PoolingDataSource -->
 	<!-- Pool de Conexões https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html -->
-
 </Context>

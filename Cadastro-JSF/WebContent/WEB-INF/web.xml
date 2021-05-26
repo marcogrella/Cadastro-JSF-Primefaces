@@ -1,12 +1,226 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
-  <display-name>cadastro-JSF</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+	xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="4.0">
+	<display-name>Projeto Java Web</display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<session-config>
+		<session-timeout>15</session-timeout> <!-- Invalida a sessão em 15 minutos -->
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+	<error-page>
+		<exception-type>org.springframework.security.access.AccessDeniedException</exception-type>
+		<location>/error/acessoNegado.jsf</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
+		<location>/error/paginaNaoEncontrada.jsf</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/acessoNegado.jsf</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/erro404.jsf</location>
+	</error-page>
+	
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/error.jsf</location>
+	</error-page>
+
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>/**</url-pattern>
+			<el-ignored>false</el-ignored>
+		</jsp-property-group>
+	</jsp-config>
+
+
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- rendereizar componentes filhos -->
+	<context-param>
+		<param-name>com.sun.faces.allowTextChildren</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- se tiver uma biblioteca antiga evita erro -->
+	<context-param>
+		<param-name>com.sun.faces.expressionFactory</param-name>
+		<param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+	</context-param>
+
+	<!-- declaração dos 3 arquivos do springboot (applicationContext, applicationContext-security 
+		e o spring-servlet-servlet.xml. Quando sobe a aplicacção lê esses 3 arquivos  -->
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+		/WEB-INF/applicationContext.xml
+		/WEB-INF/spring-servlet-servlet.xml
+		/WEB-INF/applicationContext-security.xml	 
+		</param-value>
+	</context-param>
+	
+	
+
+	<!-- desliga o cache e permite verificar uma mudança na página jsp/jsf de 
+		forma rápida facilita desenvolvimento -->
+	<context-param>
+		<param-name>java.faces.FACELETS_REFRESH_PERIOD</param-name>
+		<param-value>0</param-value>
+	</context-param>
+
+	<!-- extensões das páginas -->
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml .html .jsp</param-value>
+	</context-param>
+
+	<!-- estágio do projeto -->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>smoothness</param-value>
+	</context-param>
+	
+	<!-- declaração da classe OpenSessionInView na qual todas as requisições e 
+	respostas passam por ela -->
+	<filter>
+		<filter-name>conexaoFilter</filter-name>
+		<filter-class>br.com.project.filter.FilterOpenSessionInView</filter-class>
+	</filter>
+	
+	<!--  filter do spring security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>ISO-8859-1</param-value>
+		</init-param>
+	</filter>
+	
+	
+	<!--  filter do spring encoding -->
+	<filter>
+		<filter-name>encoding-filter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>ISO-8859-1</param-value>
+		</init-param>
+	</filter>
+	
+	
+	
+	<!-- Declarando o filter -->
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+	
+	<!-- mapeamento do filter do encoding um pouco acima -->
+	<filter-mapping>
+		<filter-name>encoding-filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- mapeamento do filter conexaoFilter-->
+	<filter-mapping>
+		<filter-name>conexaFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	
+	<!-- mapeamento do filter springSecurityFilterChain -->
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+
+
+	<!-- trabalhar com arquivos -->
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Faces Servlets</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+
+	<!--  declaração da classe contentloaderListener -->
+	<listener>
+		<listener-class>br.com.project.listener.ContextLoaderListenerCadastroUtils</listener-class>
+	</listener>
+
+	<!-- listener para a parte de mvc -->
+	<listener>
+			<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	<!-- listerner que intercepta as sessões que são criadas -->
+	<listener>
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>br.com.project.listener.CustomListener</listener-class>
+	</listener>
+	
+
+
+	<!-- Definindo o datasource. Referncia em context.xml -->
+	<resource-ref>
+		<description>DataSource datasource</description>
+		<res-ref-name>jdbc/datasource</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+	<servlet>
+		<servlet-name>spring-servlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>spring-servlet</servlet-name>
+		<url-pattern>/</url-pattern>
+		
+	</servlet-mapping>
+
+	<!-- gerenciamento do ciclo de vida do jsf -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- definindo o sufixo das páginas como jsf (ex: cadastro.jsf) -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+
 </web-app>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+   http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-lazy-init="true">
+
+	<context:annotation-config />
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+
+	<mvc:resources location="/resources/imagens"
+		mapping="/resources/**" cache-period="5000" />
+	<context:component-scan
+		base-package="br.com.project.geral.controller" />
+	<context:component-scan
+		base-package="br.com.srv.interfaces" />
+	<context:component-scan
+		base-package="br.com.srv.implementacao" />
+	<context:component-scan
+		base-package="br.com.repository.interfaces" />
+	<context:component-scan
+		base-package="br.com.dao.implementacao" />
+	<context:component-scan
+		base-package="br.com.project.bean.view" />
+	<context:component-scan
+		base-package="br.com.project.bean.geral" />
+	<context:component-scan
+		base-package="br.com.project.report.util" />
+	<context:component-scan
+		base-package="br.com.project.util.all" />
+	<context:component-scan
+		base-package="br.com.project.bean.view.grafico" />
+	<context:component-scan
+		base-package="br.com.framework.controller.crud" />
+	<context:component-scan
+		base-package="br.com.framework.interfac.crud" />
+
+	<!-- Data Source -->
+	
+	<bean lazy-init="false"
+		class="org.springframework.jndi.JndiObjectFactoryBean"
+		name="springDataSource" id="springDataSource">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/datasource</value>
+		</property>
+
+	</bean>
+
+
+	<bean lazy-init="false" class="org.flywaydb.core.Flyway"
+		id="flyway" init-method="migrate">
+		<property name="dataSource" ref="springDataSource" />
+		<property name="baselineOnMigrate" value="true" />
+		<property name="table" value="version" />
+		<property name="sqlMigrationPrefix" value="v" />
+		<property name="sqlMigrationSeparator" value="_" />
+		<property name="encoding" value="ISO-8859-1" />
+		<property name="validateOnMigrate" value="true" />
+	</bean>
+
+
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		name="transactionManager"  lazy-init="false">
+		<property name="dataSource" ref="springDataSource" />
+	</bean>
+	
+	<bean id="jdbcTemlate" class="br.com.framework.implementacao.crud.JdbcTemplateImpl"
+		name="jdbcTemlate" >
+		<constructor-arg name="dataSource"
+			ref="springDataSource" />
+	</bean>
+
+	
+	<bean id="simpleJdbcTemplate"
+		class="br.com.framework.implementacao.crud.SimpleJdbcTemplateImpl"
+		name="simpleJdbcTemplate" >
+		<constructor-arg name="dataSource"
+			ref="springDataSource" />
+	</bean>
+
+	
+	<bean id="simpleJdbcInsert" lazy-init="false"
+		class="br.com.framework.implementacao.crud.SimpleJdbcInsertImpl"
+		name="simpleJdbcInsert" >
+		<constructor-arg name="dataSource"
+			ref="springDataSource" />
+	</bean>
+
+
+	<bean lazy-init="false"
+		class="br.com.framework.implementacao.crud.SimpleJdbcClassImpl"
+		name="simpleJdbcClassImpl" id="simpleJdbcClassImpl">
+		<constructor-arg name="dataSource"
+			ref="springDataSource" />
+	</bean>
+
+
+	<bean id="urlMapping" 
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"	
+		lazy-init="false">
+		<property name="mappings">
+		<props>
+			<prop key="/index.jsp">indexController</prop>
+			</props>
+		</property>
+	</bean>
+
+	
+	<bean id="viewResolver" 
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		lazy-init="false">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WebContent/" />
+		<property name="suffix"
+			value="*.jsf, *.xhtml, *.html, *.jsp, *.js" />
+	</bean>
+
+	<bean name="indexController"
+		class="org.springframework.web.servlet.mvc.ParameterizableViewController"
+		lazy-init="false"/>
+
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer"
+		lazy-init="false">
+		<property name="scopes">	
+			<map>			
+				<entry key="view">
+					<bean class="br.com.project.bean.geral.ViewScope" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="reportUtil" class="br.com.project.report.util.ReportUtil" />
+	<bean id="utilFramework" scope="session" class="br.com.framework.utils.UtilFramework" />
+
+
+</beans>
